@@ -5,27 +5,51 @@ using UnityEngine;
 public class EnemyGenerator : MonoBehaviour
 {
     public GameObject enemyPrefab;  //“G‚ÌƒvƒŒƒnƒu‚ð•Û‘¶‚·‚é•Ï”
+    public GameObject enemybosPrefab;  //“G(Bos)‚ÌƒvƒŒƒnƒu‚ð•Û‘¶‚·‚é•Ï”
+    public GameObject itemPrefab;  //“G‚ÌƒvƒŒƒnƒu‚ð•Û‘¶‚·‚é•Ï”
+    public Vector3 Shotdir = Vector3.zero;//ƒvƒŒƒCƒ„[‚ð‘_‚¤UŒ‚‚ð•Û‘¶‚·‚é•Ï”
     float delta = 0;                    //Œo‰ßŽžŠÔŒvŽZ—p•Ï”
     float span = 1;                     //“G‚ðo‚·ŠÔŠui•bj‚ð•Û‘¶‚·‚é•Ï”
+    GameObject director;
 
     void Start()
     {
-        
+        director = GameObject.Find("GameDirector");
     }
 
     void Update()
     {
-        delta += Time.deltaTime;
-        if (delta > span)
+        if (director.GetComponent<GameDirector>().judge)
         {
-            //“G‚ð¶¬‚·‚é
-            GameObject go = Instantiate(enemyPrefab);
-            float py = Random.Range(-3f,4f);
-            go.transform.position = new Vector3(10,py,0);
-            //ŽžŠÔŒo‰ß‚ð•Û‘¶‚µ‚Ä‚¢‚é•Ï”‚ð0ƒNƒŠƒA‚·‚é
-            delta = 0;
-            //“G‚ðo‚·ŠÔŠu‚ð™X‚É’Z‚­‚·‚é
-            span -= (span > 0.5f) ? 0.01f : 0f;
+            delta += Time.deltaTime;
+            if (delta > span)
+            {
+                if (Random.Range(0, 26) == 0)
+                {
+                    GameObject go = Instantiate(itemPrefab);
+                    float py = Random.Range(-3f, 4f);
+                    go.transform.position = new Vector3(10, py, 0);
+                    delta = 0;
+                    span -= (span > 0.5f) ? 0.01f : 0f;
+                }
+                else
+                {
+                    //“G‚ð¶¬‚·‚é
+                    GameObject go = Instantiate(enemyPrefab);
+                    float py = Random.Range(-3f, 4f);
+                    go.transform.position = new Vector3(10, py, 0);
+                    //ŽžŠÔŒo‰ß‚ð•Û‘¶‚µ‚Ä‚¢‚é•Ï”‚ð0ƒNƒŠƒA‚·‚é
+                    delta = 0;
+                    //“G‚ðo‚·ŠÔŠu‚ð™X‚É’Z‚­‚·‚é
+                    span -= (span > 0.5f) ? 0.01f : 0f;
+                }
+            }
+            if (director.GetComponent<GameDirector>().BosCreate)
+            {
+                GameObject go = Instantiate(enemybosPrefab);
+                go.transform.position = new Vector3(13, 0, 0);
+                director.GetComponent<GameDirector>().BosCreate = false;
+            }
         }
     }
 }
