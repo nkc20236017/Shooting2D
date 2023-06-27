@@ -183,5 +183,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb138b011434be848918f14550bfe8fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  EnemyBosShotPrefab: {fileID: 2254044883870742521, guid: 58397b692ebe472468fbd8ea972e8c67, type: 3}
+  EnemyBosShotPrefab: {fileID: 6847139983177429280, guid: 68b3e9e81245286498ec00235c19f945, type: 3}
+  EnemyShotPrefab: {fileID: 3911476015431610249, guid: 971f0df4763cfe24b81b7c3af059bd71, type: 3}
   ExplosionPrefab: {fileID: 201425027632827890, guid: b4bebabf31bb7294fbe8ccb9e128b1bb, type: 3}

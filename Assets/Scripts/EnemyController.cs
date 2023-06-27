@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {
-    Transform player;
+    GameObject player;
     GameObject generator;
     Vector3 dir =Vector3.zero;  //ˆÚ“®•ûŒü
-    float speed = 5;            //ˆÚ“®‘¬“x
+    float speed = 7;            //ˆÚ“®‘¬“x
     float delta = 0f;                    //Œo‰ßŠÔŒvZ—p•Ï”
-    float span = 1.5f;                     //UŒ‚‚ğo‚·ŠÔŠui•bj‚ğ•Û‘¶‚·‚é•Ï”
+    float span = 1f;                     //UŒ‚‚ğo‚·ŠÔŠui•bj‚ğ•Û‘¶‚·‚é•Ï”
     int random = 0;
     public GameObject EnemyShotPrefab;
     public GameObject ExplosionPrefab;
@@ -18,6 +18,7 @@ public class EnemyController : MonoBehaviour
     {
         director = GameObject.Find("GameDirector");
         generator = GameObject.Find("Generator");
+        player = GameObject.Find("Player");
         random = Random.Range(0, 2);
         //ˆÚ“®•ûŒü‚ğİ’è
         dir = Vector3.left;
@@ -25,7 +26,9 @@ public class EnemyController : MonoBehaviour
 
     void Update()
     {
-        delta += Time.deltaTime;
+        if (director.GetComponent<GameDirector>().judge)
+        {
+            delta += Time.deltaTime;
         if (transform.position.x < -10)
         {
             Destroy(gameObject);
@@ -38,11 +41,10 @@ public class EnemyController : MonoBehaviour
             transform.position += dir * speed * Time.deltaTime;
             if (delta > span)
             {
-                if (director.GetComponent<GameDirector>().judge)
-                {
-                    player = GameObject.Find("Player").transform;
+
+                    player = GameObject.Find("Player");
                     // “G‚ÌˆÚ“®•ûŒü‚ğƒvƒŒ[ƒ„[‚Ì‚¢‚é•ûŒü‚É‚·‚é
-                    generator.GetComponent<EnemyGenerator>().Shotdir = player.position - transform.position;
+                    generator.GetComponent<EnemyGenerator>().Shotdir = player.transform.position - transform.position;
                     //EnemyShot‚ğ¶¬‚·‚é
                     Instantiate(EnemyShotPrefab, transform.position,
                                 Quaternion.FromToRotation(Vector3.up, generator.GetComponent<EnemyGenerator>().Shotdir));
@@ -50,18 +52,22 @@ public class EnemyController : MonoBehaviour
                     delta = 0;
                 }
             }
-
-        }
         else
         {
             //Œ»İ’n‚ÉˆÚ“®—Ê‚ğ‰ÁZ
             transform.position += dir.normalized * speed * Time.deltaTime;
+        }
         }
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "Player")
         {
+            if (player.GetComponent<PlayerController>().isDamaged || player.GetComponent<PlayerController>().isDamaged2)
+            {
+                return;
+            }
+            player.GetComponent<PlayerController>().isDamaged = true;
             //HP‚ğ0.2•bŒ¸‚ç‚·
             director.GetComponent<GameDirector>().DecreaseHp();
             Instantiate(ExplosionPrefab, transform.position, transform.rotation);
@@ -74,6 +80,12 @@ public class EnemyController : MonoBehaviour
                 Instantiate(ExplosionPrefab, collision.transform.position, collision.transform.rotation);
                 Destroy(gameObject);
                 Destroy(collision.gameObject);
+        }
+        if (collision.gameObject.tag == "MyShotBig")
+        {
+            director.GetComponent<GameDirector>().IncreaseScore();
+            Instantiate(ExplosionPrefab, collision.transform.position, collision.transform.rotation);
+            Destroy(gameObject);
         }
     }
 }

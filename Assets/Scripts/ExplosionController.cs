@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ExplosionController : MonoBehaviour
 {
-    public void DestroyAnimation()
+    public void DestroyAnimation()  //アニメーションを削除する
     {
         Destroy(gameObject);
     }

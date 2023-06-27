@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using static UnityEditor.PlayerSettings;
 
 public class GameDirector : MonoBehaviour
 {
@@ -12,7 +13,9 @@ public class GameDirector : MonoBehaviour
     public GameObject ResultPanel;
     public GameObject BosHP;
     public GameObject MainCamera;
+    public GameObject Player;
     public Slider playerslider;
+    public Slider powerslider;
     public Slider bosenemyslider;
     int score = 0;      //距離を保存する変数
     int highscore = 0;
@@ -22,21 +25,24 @@ public class GameDirector : MonoBehaviour
     void Start()
     {
         playerslider.value = 1f;
-        MainCamera = GameObject.Find("Main Camera");
+        powerslider.value = 0f;
+        bosenemyslider.value = 0f;
         highscore = PlayerPrefs.GetInt("SCORE", 0);
     }
 
     void Update()
     {
+        powerslider.value = Player.GetComponent<PlayerController>().timer;
         if (score >= BosCreatescore)
         {
             BosCreate = true;
             BosHP.SetActive(true);
             bosenemyslider.value = 1f;
-            BosCreatescore += BosCreatescore*1000;
+            BosCreatescore += BosCreatescore + 10000;
         }
-        //残り時間が0になったらリロード
-        if (playerslider.value <= 0f)
+        playerslider.value = Mathf.Clamp(playerslider.value, 0f, 1f);
+        //残りHPが0になったらリロード
+        if (playerslider.value == 0f)
         {
             judge = false;
             ResultPanel.SetActive(true);
@@ -68,6 +74,10 @@ public class GameDirector : MonoBehaviour
     public void DecreasebosHp()    //HPを減らす
     {
         bosenemyslider.value -= 0.05f;
+    }
+    public void DecreasebosHp2()    //HPを減らす
+    {
+        bosenemyslider.value -= 0.2f;
     }
     public void IncreaseScore()
     {

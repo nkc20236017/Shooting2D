@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    public void Shake(float duration, float magnitude)
+    public void Shake(float duration, float magnitude)  
     {
         StartCoroutine(DoShake(duration, magnitude));
     }
 
-    IEnumerator DoShake(float duration, float magnitude)
+    IEnumerator DoShake(float duration, float magnitude)    //ƒJƒƒ‰‚ğU“®‚³‚¹‚é(duration...ŠÔ@magnitude...—h‚ê‚Ì‹­‚³)
     {
         Vector3 pos = transform.position;
 
